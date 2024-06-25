@@ -1,0 +1,324 @@
+# defines what the .kv file will use as reference for formatting. # Must be called in 'main.py'
+# BoxLayoutExample:             # Sets everything into neat lil boxes. They adjust to the size and shape of the screen, Great for having big blocks
+# AnchorLayoutExample:          # can only call one at a time
+# GridLayoutExample:            # You can always make new files. for example: a grid_layout.py connected to a GridLayout.kv, a widgets.py connected to a Widgets.kv etc..
+# StackLayoutExample:           # ^ Would make it easier for copying and conceptualizing
+# ScrollViewExample:
+# PageLayoutExample:
+# WidgetsExample:
+# ImagesExample:
+# CanvasExample1:
+# CanvasExample2:
+# CanvasExample3:
+# CanvasExample4:
+# CanvasExample5:
+# CanvasExample6:
+CanvasExample7:
+
+
+<CanvasExample7>:
+    BoxLayout:
+        size: root.size
+        Widget:
+            canvas:
+                Color:
+                    rgb: 0, 0, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+        Widget:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+        Widget:
+            canvas:
+                Color:
+                    rgb: 1, 0, 0
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+
+<CanvasExample6>:
+    # RelativeLayout:
+    #     canvas:
+    #     # using 'canvas.before' will place the 'Rectangle' BEFORE the 'Button'/Parent function
+    #         Rectangle:
+    #     text: "A"
+    #     pos: 100, 100
+
+    BoxLayout:
+        size: root.size
+        Widget:
+            canvas:
+                Color:
+                    rgb: 0, 0, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+        # Widget:
+        RelativeLayout:
+            canvas:
+                Color:
+                    rgb: 0, 1, 1
+                Rectangle:
+                    size: self.size
+                    #pos: self.pos
+#                                   Widgets auto move to (0, 0). using self.pos you can force it to move relative to the widget before, or hard code a position as well
+#                                   You can also use 'RelativeLayout' in place of 'Widget' to avoid having to specify location, and it'll place the item immediately after the previous item
+
+
+<CanvasExample5>:
+
+
+<CanvasExample4>:
+    Button:
+        pos: 100, 400
+        text: "A"
+        on_press: root.on_button_a_click()
+
+<CanvasExample3>:
+    canvas:
+        Color:                                  # Changes color until you change it again. going top to bottom, global property, not local to each line or circle
+            rgb: 1, 0, 0
+        Line:
+            circle: (100, 100, 50)  # center_x, centery, radius
+            width: 2
+        Color:
+            rgb: 0, 1, 0
+        Line:
+            ellipse: (500, 300, 100, 200)  # center_x, centery, radius_x, radius_y
+            width: 4
+        Color:
+            rgb: 0, 0, 1
+
+        Line:
+            rectangle: (800, 100, 300, 200)  # x, y, width, height
+            width: 2
+
+# Gives a cross that is perfectly centered regardless of screen or container size
+<CanvasExample2>:
+    canvas:
+        Line:
+            points: (0, self.height/2, self.width, self.height/2)
+            width: 2
+        Line:
+            points: (self.width/2, 0, self.width/2, self.height)
+            width: 2
+
+# #:set s dp(150)
+
+<CanvasExample1>:
+    canvas:
+        Rectangle:
+            pos: self.center_x-s/2, self.center_y-s/2   # Keeps things(Rectangle) nice and centered.
+            size: dp(150), dp(150)
+        Ellipse:
+            pos: 200, 500
+            size: s, s/2
+        Line:
+            points: (0, 0, self.width/4, 100, self.width/2, 0, self.width*3/4, 100, self.width, 0)   # (x, y, x2, y2, x3, y3, x4, y4, etc..) this is how you can put any lines anywhere, just keep defining points and itll connect them
+
+<ImagesExample@GridLayout>:
+    cols: 3
+    Image:
+        source: "images/cake.jpg"               # Image at original size, will shrink to fit, but not expand. will keep it's original ratio
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: True                     # Allows image to stretch bigger than it's original size
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: True
+        keep_ratio: False                       # Makes it so image fits size of any container it's in. MUST be used with 'allow_stretch'
+
+
+<WidgetsExample>:
+    cols: 3
+    ToggleButton:                               # Similar to a regular button, but stays activated until clicked again
+        text: "OFF"
+        on_state: root.on_toggle_button_state(self)
+        size_hint: None, 1
+        width: "100dp"
+#
+    Button:
+        text: "Count"
+        on_press: root.on_button_click()        # root refers to the 'WidgetsExample'. kind of like self.variable, but it's root.function it seems
+        disabled: not root.count_enabled        # Since disabled has to be True while count_disabled is False, using 'not' in front of 'root.count_enabled' returns the opposite of the boolean
+#
+    Label:
+        text: root.my_text
+        font_name: "fonts/Lcd.ttf"              # Referencing fonts from the fonts folder. 
+        font_size: "80dp"
+        color: 1, .5, 1, 1
+#
+    Switch:
+        id: my_switch                           # ID to call it elsewhere
+        on_active: root.on_switch_active(self)  # calls the python function
+        size_hint: None, None                   # manually setting the height
+        width: "100dp"
+        height: "100dp"
+        active: True                            # default switch setting is 'ON'
+#    
+    Slider:
+        id: my_slider                           # using id, you can call it in the label section and use it to find the value
+        min: 0                                  # Sets minimum for slider
+        max: 100                                # Sets maximum for slider
+        value: 50                               # sets default value for slider
+        # on_value: root.on_slider_value(self)
+        orientation: "vertical"                 # sets slider orientation
+        disabled: not my_switch.active              # if 'my_switch' is active, enable the slider. else, slider won't work
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: str(int(my_slider.value))         # super efficient way to get slider values. 'int' converts it from a wacky 12 digit decimal to just an int
+        ProgressBar:
+            max: 100
+            value: my_slider.value                  # In this example, the progress bar represents the slider. whatever value the slide is at, so will the progress bar be
+
+    TextInput:                                      # Input box for text
+        id: my_text_input
+        size_hint: None, 1
+        width: "100dp"
+        text: "foo"                                 # Text box has default text that user can delete or keep
+        multiline: False                            # Allows only one line of text, even though the box may look bigger
+        on_text_validate: root.on_text_validate(self)
+    Label:
+        # text: my_text_input.text                    # Everything that is input into the text box will come be copied as a label
+        text: "Your name is: " + root.text_input_str    # Adding a string before on just the label makes the user response part of the string. ie. "Your name is: JDogg"
+
+
+
+
+<PageLayoutExample@PageLayout>: # Make new pages for each view
+    MainWidget:
+    BoxLayoutExample:
+    AnchorLayoutExample:
+    GridLayoutExample:
+
+<ScrollViewExample@ScrollView>: 
+    StackLayoutExample:
+        size_hint: 1, None              # horizontal is 100%, vertical is None so we can adjust it
+        height: self.minimum_height     # 'self.minimum_height' auto adjusts height to fit content. can also be hard coded ex: 4000  (this would be 4000px)
+
+<StackLayoutExample>:
+    # orientation: "lr-bt"              # options: lr-bt (left to right-bottom to top) rl-tb, etc... default is lr-tb (left to right-top to bottom)
+    # padding:  ("20dp", "20dp", "20dp", "20dp") # gives a margin effect on all buttons in the StackLayoutExample. not individually, but as a whole
+    # spacing: "20dp", "20dp"           # spacing between the buttons
+
+
+    # Button:
+    #     text: "A"
+    #     size_hint: .2, .2
+    # Button:
+    #     text: "B"
+    #     size_hint: .2, .2
+    # Button:
+    #     text: "C"
+    #     size_hint: .2, .2
+    # Button:
+    #     text: "D"
+    #     size_hint: .2, .2
+    # Button:
+    #     text: "E"
+    #     size_hint: .2, .2
+    # Button:
+    #     text: "F"
+    #     size_hint: .2, .2
+
+
+<GridLayoutExample@GridLayout>: # makes it so we *DON'T* have to call this in 'main.py'. *MUST* specify what kind of layout you want to use after the '@'
+    rows: 2                     # Choose number of rows per screen/window
+    cols: 3                     # Choose number of columns per screen/window
+    Button:
+        text: "A"
+        size_hint: None, 1      # 'None' width, 100% height. Will only work if both/all columns/rows have the same specs. otherwise will default to the biggest size box/button
+        width: "60dp"
+    BoxLayoutExample:           # Using Nested layouts will cause that box/point in the grid to be formatted how the other is formatted. This is pretty much just calling it here
+    #                           # The entire BoxLayoutExample will be in place of the 'B' Box, keeping all spacing and specifications from BoxLayoutExample
+    Button:
+        text: "C"
+    Button:
+        text: "D"
+        size_hint: None, 1      # 'None' width, 100% height. Will only work if both columns have the same specs. otherwise will default to the biggest size box/button
+        width: "60dp"
+    Button:
+        text: "E"
+    Button:
+        text: "F"
+
+
+
+
+
+
+<AnchorLayoutExample>:
+#                               # anchor_x: right, left, center
+    anchor_x: "center" 
+#                               # anchor_y: bottom, top, center
+    anchor_y: "top"
+#                               # Define where you're placing the child elements
+    BoxLayout:
+        size_hint: .2, .2       # Can have size_hint globaly for boxlayout or individually per button
+        Button:
+            text: "A"
+        Button:
+            text: "B"
+
+
+
+
+<BoxLayoutExample>:             # this is another way to do what is on 'main.py' under BoxLayoutExample. BoxLayoutExample is not rigid.
+#                               # adding 'size' will not change the size of a button, must use size_hint
+    orientation: "horizontal"
+    Button:
+        text: "A"               # Size property will not work here
+        size_hint: .8, .5       # 80% of the width, 50% of the height
+
+    BoxLayout:                  # Nested BoxLayout allows you to put multiple buttons in the place of one. 
+        orientation: "vertical" # Seperate orientation from the 'global' orientation above, only applies to this section/'Box'
+        spacing: "10dp"         # 'spacing' puts space between the boxes
+        Button:
+            text: "B1"
+            # size_hint: 1, 1   # 100% of the width, 100% of the height of window
+#                               # if orientation is horizontal and height > 100%, the button in this case will be bigger than the screen is
+        Button:
+            text: "B2"
+        Button:
+            text: "B3"
+        Button:
+            text: "B4"
+
+    Label:
+        text: "C"
+        size_hint: .5, None     # forcing a specified height of my choosing
+        # width: "100dp"
+        height: "60dp"
+        # x, center_x, right
+        # y, center_y, top
+        pos_hint: { "right": 1} # you must choose which axis to adjust, x, center_x, right, y, center_y or top. done by percent again
+#                               # Note: when using right, it's where the right edge of the button will be percent-wise from the left side of the window
+#                               # when using center_x, it's based on where the center of the box is from the left side of the window.
+#                               # When orientation is horizontal, 0 is at the bottom
+
+
+
+
+<MainWidget>:                   # This is where the 'MainWidget' is defined. This is a rigid system.
+    Button:                     # defining a button, can be clicked/ interacted with
+        text: "Hello"           # specifying the text to be displayed on the button 
+
+        # size: 400, 500        # alters size of the button using pixels, first number is x-axis, second is y-axis
+        size: "40dp", "40dp"    # alters size of the button, is consistent across all devices, won't change size, first number is x-axis, second is y-axis
+
+        # pos: 100, 200         # alters position of the button using pixels, first number is x-axis, second is y-axis. 0, 0 is the bottom left corner
+        pos: "100dp", "200dp"   # alters position of the button, is consistent across all devices, won't if device is diffrent, first number is x-axis, second is y-axis
+        color: 0, 1, 0, 1       # Will only change color of text, not box
+
+    Label:                      # Label is different from a button, has no border, just text, cannot be interacted with. just a label
+        text: "Hello2"          # Will show up on top of the other button if it's in the same position. Reads file top to bottom 
+        size: "40dp", "40dp"
+        pos: "200dp", "400dp"
+        color: 1, 0, 0, 1       # change letters for number out of 1 where 1 is 100% and 0 is 0%, can be done to buttons as well
